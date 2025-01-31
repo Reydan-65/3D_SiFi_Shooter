@@ -65,6 +65,20 @@ public class DestructibleBase : Entity
         }
     }
 
+    public void ApplyHeal(int count)
+    {
+        if (IsDead) return;
+
+        m_CurrentHitPoints += count;
+        if (m_CurrentHitPoints >= m_HitPoints) m_CurrentHitPoints = m_HitPoints;
+    }
+
+    public void RestoreHealth()
+    {
+        if (IsDead) return;
+
+        m_CurrentHitPoints = m_HitPoints;
+    }
     #endregion
 
     /// <summary>

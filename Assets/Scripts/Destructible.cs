@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class Destructible : DestructibleBase
 {
-    [SerializeField] private int m_ScoreValue;
-    public int ScoreValue => m_ScoreValue;
+    //[SerializeField] private int m_ScoreValue;
+    //public int ScoreValue => m_ScoreValue;
 
     protected override void OnDeath()
     {
@@ -32,8 +32,8 @@ public class Destructible : DestructibleBase
         //    gameObject.TryGetComponent(out Debris debris) == true)
         //    Destroy(gameObject, 2);
         //else
-            Destroy(gameObject);
+        //    Destroy(gameObject);
 
-        base.OnDeath();
+        //base.OnDeath();
     }
 }

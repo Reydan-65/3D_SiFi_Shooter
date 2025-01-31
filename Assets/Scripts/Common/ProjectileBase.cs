@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class ProjectileBase : Entity
@@ -21,7 +22,7 @@ public abstract class ProjectileBase : Entity
 
     protected virtual void Awake() { }
 
-    protected virtual void FixedUpdate()
+    protected virtual void Update()
     {
         float stepLenght = Time.deltaTime * m_Velocity;
 
@@ -31,19 +32,22 @@ public abstract class ProjectileBase : Entity
 
         if (Physics.Raycast(transform.position, transform.forward, out hit, stepLenght) == true)
         {
-            OnHit(hit.collider);
-
-            Destructible destructible = hit.collider.transform.root.GetComponent<Destructible>();
-
-            if (destructible != null && destructible != m_Parent)
+            if (hit.collider != null && !hit.collider.isTrigger)
             {
-                destructible.ApplyDamage(m_Damage);
+                OnHit(hit.collider);
 
-                OnHit(destructible);
-                OnProjectileLifeEnd(hit.collider, hit.point, hit.normal);
+                Destructible destructible = hit.collider.transform.root.GetComponent<Destructible>();
+
+                if (destructible != null && destructible != m_Parent)
+                {
+                    destructible.ApplyDamage(m_Damage);
+
+                    OnHit(destructible);
+                    OnProjectileLifeEnd(hit.collider, hit.point, hit.normal);
+                }
+
+                hit = OnHitObstacles(hit);
             }
-
-            hit = OnHitObstacles(hit);
         }
 
         // Время жизни снаряда.
@@ -51,7 +55,7 @@ public abstract class ProjectileBase : Entity
 
         if (m_Timer > m_Lifetime)
         {
-            if (hit.collider != null)
+            if (hit.collider != null && !hit.collider.isTrigger)
                 OnProjectileLifeEnd(hit.collider, hit.point, hit.normal);
             else
                 Destroy(gameObject);

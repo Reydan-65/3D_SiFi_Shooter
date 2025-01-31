@@ -7,13 +7,6 @@ public class ImpactEffectBase : MonoBehaviour
 
     protected float m_Timer;
 
-    // Звук слегка изменяется
-    private void Start()
-    {
-        //float pitch = Random.Range(0.95f, 1.05f);
-        //transform.root.GetComponent<AudioSource>().pitch = pitch;
-    }
-
     protected virtual void FixedUpdate()
     {
         if (m_Timer < m_LifeTime)

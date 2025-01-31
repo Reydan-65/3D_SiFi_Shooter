@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Weapon : WeaponBase
 {
-    private const float AIMING_OFFSET_Y = 15.0f;
+    private const float AIMING_OFFSET = 15.0f;
 
     [SerializeField] private CharacterMovement targetCharacterMovement;
     [SerializeField] private ParticleSystem targetMuzzleFlashParticles;
@@ -26,11 +26,14 @@ public class Weapon : WeaponBase
 
     private AudioSource audioSource;
 
+    private Quaternion baseRotation;
+
     private void Start()
     {
         primaryEnergy = primaryMaxEnergy;
         owner = transform.root.GetComponent<Destructible>();
         audioSource = GetComponent<AudioSource>();
+        baseRotation = transform.localRotation;
     }
 
     protected override void FixedUpdate()
@@ -38,14 +41,22 @@ public class Weapon : WeaponBase
         if (m_RefireTimer > 0)
             m_RefireTimer -= Time.deltaTime;
 
-        if (targetCharacterMovement.IsAiming && !targetCharacterMovement.IsCrouch)
+        if (targetCharacterMovement != null)
         {
-            transform.localRotation = Quaternion.Euler(transform.localRotation.x, transform.localRotation.y + AIMING_OFFSET_Y, transform.localRotation.z);
-        }
+            if (targetCharacterMovement.IsAiming && !targetCharacterMovement.IsCrouch)
+            {
+                transform.localRotation = Quaternion.Euler(transform.localRotation.x, transform.localRotation.y + AIMING_OFFSET, transform.localRotation.z);
+            }
 
-        if (targetCharacterMovement.IsAiming && targetCharacterMovement.IsCrouch)
-            transform.localRotation = Quaternion.Euler(transform.localRotation.x, transform.localRotation.y + AIMING_OFFSET_Y * 2, transform.localRotation.z);
-        
+            if (targetCharacterMovement.IsAiming && targetCharacterMovement.IsCrouch)
+                transform.localRotation = Quaternion.Euler(transform.localRotation.x, transform.localRotation.y + AIMING_OFFSET * 2, transform.localRotation.z);
+
+            if (!targetCharacterMovement.IsAiming)
+                transform.localRotation = Quaternion.Euler(baseRotation.x, baseRotation.y - 5, baseRotation.z + AIMING_OFFSET);
+
+            if (targetCharacterMovement.transform.GetComponent<CharacterController>().velocity.magnitude > 0.01f && !targetCharacterMovement.IsAiming)
+                transform.localRotation = Quaternion.Euler(baseRotation.x + 10, baseRotation.y, baseRotation.z + 15);
+        }
 
         UpdateEnergy();
     }
@@ -81,22 +92,11 @@ public class Weapon : WeaponBase
 
         targetMuzzleFlashParticles.time = 0;
         targetMuzzleFlashParticles.Play();
+
+        float pitch = Random.Range(0.975f, 1.025f);
         audioSource.clip = weaponProperties.LaunchSFX;
+        audioSource.pitch = pitch;
         audioSource.Play();
-
-        /// <summary>
-        /// Звук выстрела.
-        /// Звук слегка изменяется.
-        /// </summary>
-
-        //if (Mode == TurretMode.Primary && m_TurretProperties.ProjectilePrefab.GetComponent<SmallPlasmaProjectile>() == true)
-        //    PlaySoundByIndex(0);
-        //if (Mode == TurretMode.Primary && m_TurretProperties.ProjectilePrefab.GetComponent<PlasmaCannonProjectile>() == true)
-        //    PlaySoundByIndex(1);
-        //if (Mode == TurretMode.Secondary && m_TurretProperties.ProjectilePrefab.GetComponent<Missle>() == true)
-        //    PlaySoundByIndex(2);
-        //if (Mode == TurretMode.Secondary && m_TurretProperties.ProjectilePrefab.GetComponent<EMPBomb>() == true)
-        //    PlaySoundByIndex(3);
     }
 
     public override void AssingLoadout(WeaponProperties properties)
@@ -105,16 +105,6 @@ public class Weapon : WeaponBase
 
         m_RefireTimer = 0;
         weaponProperties = properties;
-    }
-
-    private void PlaySoundByIndex(int index)
-    {
-        float pitch = Random.Range(0.95f, 1.05f);
-
-        transform.root.GetComponent<AudioSource>().pitch = pitch;
-
-        //SoundManager.Instance.PlayOneShot(SoundManager.Instance.AudioProperties.ProjectileLaunchClips, index,
-        //             transform.root.GetComponent<AudioSource>(), SoundManager.Instance.AudioProperties.SoundsVolume);
     }
 
     public void FirePointLookAt(Vector3 position)

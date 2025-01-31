@@ -17,6 +17,7 @@ public class ThirdPersonCamera : MonoBehaviour
     [SerializeField] private float changeOffsetRate;
     [SerializeField] private float rotateTargetLerpRate;
     [SerializeField] private Vector3 Offset;
+    [SerializeField] private LayerMask ignoreTriggerLayerMask;
 
     [HideInInspector]
     public bool IsRotateTarget;
@@ -32,11 +33,13 @@ public class ThirdPersonCamera : MonoBehaviour
     private Vector3 defaultOffset;
     private Vector3 defaultCrouchOffset;
 
+
     private void Start()
     {
         targetOffset = Offset;
         defaultOffset = Offset;
-        defaultCrouchOffset = new Vector3(Offset.x ,Offset.y - 0.5f, Offset.z);
+        defaultCrouchOffset = new Vector3(Offset.x, Offset.y - 0.5f, Offset.z);
+        transform.SetParent(null);
     }
 
     private void Update()
@@ -58,7 +61,7 @@ public class ThirdPersonCamera : MonoBehaviour
         RaycastHit hit;
         Vector3 offsetPosition = targetTransform.position + new Vector3(Offset.x, Offset.y, Offset.z);
 
-        if (Physics.Linecast(offsetPosition, finalPosition, out hit) == true)
+        if (Physics.Linecast(offsetPosition, finalPosition, out hit, ~ignoreTriggerLayerMask) == true)
         {
             float distanceToHit = Vector3.Distance(offsetPosition, hit.point);
 
@@ -113,7 +116,7 @@ public class ThirdPersonCamera : MonoBehaviour
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(transform.position, Vector3.right, out hit))
+        if (Physics.Raycast(transform.position, Vector3.right, out hit, ~ignoreTriggerLayerMask))
         {
             float distanceToHit = hit.distance;
 
