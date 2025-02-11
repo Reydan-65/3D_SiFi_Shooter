@@ -67,6 +67,12 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: Is Aiming
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Is Falling
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Is Interact Action
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4362113158075117228}
   m_Solo: 0
@@ -410,6 +416,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: Is Run
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Is Ground
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4535547964678507574}
   m_Solo: 0
@@ -443,6 +452,12 @@ AnimatorStateTransition:
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: Is Aiming
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Is Falling
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Is Interact Action
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4362113158075117228}
@@ -502,6 +517,9 @@ AnimatorStateTransition:
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Is Aiming
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Is Interact Action
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -2208430083055973010}
@@ -618,6 +636,9 @@ AnimatorStateTransition:
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Is Aiming
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Is Interact Action
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -2208430083055973010}
@@ -750,6 +771,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: Is Crouch
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Is Interact Action
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4665008497929644822}
   m_Solo: 0
@@ -864,7 +888,7 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: Is Ground
     m_EventTreshold: 0
-  - m_ConditionMode: 2
+  - m_ConditionMode: 1
     m_ConditionEvent: Is Falling
     m_EventTreshold: 0
   - m_ConditionMode: 3
@@ -923,6 +947,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Is Ground
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Is Falling
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 879498550279673139}
   m_Solo: 0
@@ -954,6 +981,12 @@ AnimatorController:
     m_Controller: {fileID: 9100000}
   - m_Name: Normalize Movement Z
     m_Type: 1
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
+  - m_Name: Is Interact Action
+    m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
@@ -1201,6 +1234,9 @@ AnimatorStateTransition:
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: Is Run
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Is Interact Action
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6266381520287208922}
@@ -1721,6 +1757,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: Is Crouch
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Is Interact Action
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 9117172144285029859}
   m_Solo: 0
@@ -1754,6 +1793,9 @@ AnimatorStateTransition:
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Is Aiming
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Is Interact Action
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4665008497929644822}
@@ -1969,6 +2011,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: Is Aiming
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Is Interact Action
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 9117172144285029859}
   m_Solo: 0
@@ -2033,6 +2078,9 @@ AnimatorStateTransition:
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Is Aiming
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Is Interact Action
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4535547964678507574}
@@ -2197,7 +2245,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: New State
+  m_Name: Climbing Ladder
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -2298,6 +2346,9 @@ AnimatorStateTransition:
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Is Crouch
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Is Interact Action
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6266381520287208922}

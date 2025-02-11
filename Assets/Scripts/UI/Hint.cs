@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(Canvas))]
 public class Hint : MonoBehaviour
@@ -43,7 +42,7 @@ public class Hint : MonoBehaviour
 
 #if UNITY_EDITOR
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, m_ActiveRadius);

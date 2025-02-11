@@ -35,6 +35,7 @@ public class CharacterMovement : MonoBehaviour
     private Vector3 ladderTopPosition;
     private Vector3 ladderBottomPosition;
 
+    private bool updatePosition = true;
     private bool isInteractAction;
     private bool isAiming;
     private bool isJump;
@@ -57,7 +58,8 @@ public class CharacterMovement : MonoBehaviour
     private Vector3 lastGrabLadderDirection;
     private LayerMask obstacleLayer;
     private Ladder targetLadder;
-
+    
+    public bool UpdatePosition { get => updatePosition; set => updatePosition = value; }
     public bool IsInteractAction { get => isInteractAction; set => isInteractAction = value; }
     public bool IsAiming => isAiming;
     public bool IsJump => isJump;
@@ -72,6 +74,8 @@ public class CharacterMovement : MonoBehaviour
     public Vector3 InteractPosition { get => interactPosition; set => interactPosition = value; }
     public Vector3 interactTarget { get => interactRotation; set => interactRotation = value; }
     public Ladder TargetLadder => targetLadder;
+    public float CurrentSpeed => GetCurrentSpeedByState();
+
 
     [HideInInspector]
     public Vector3 TargetDirectionControl;
@@ -195,7 +199,13 @@ public class CharacterMovement : MonoBehaviour
         movementDirection = transform.TransformDirection(movementDirection);
         movementDirection += Physics.gravity * Time.fixedDeltaTime;
 
-        characterController.Move(movementDirection * Time.fixedDeltaTime);
+        if (updatePosition == true)
+            characterController.Move(movementDirection * Time.fixedDeltaTime);
+    }
+
+    public void MoveStrafe(Vector3 dir)
+    {
+        transform.position += dir * Time.deltaTime;
     }
 
     public void ClimbLadder()
@@ -265,19 +275,18 @@ public class CharacterMovement : MonoBehaviour
 
     private bool UpdateGroundState()
     {
-        if (currentDistanceToGround >= -0.001 && currentDistanceToGround <= 0.001)
-        {
-            lastDistanceToGround = transform.localPosition.y;
-            isGrounded = true;
-        }
-        if (currentDistanceToGround < -0.001 || currentDistanceToGround > 0.001) isGrounded = false;
+        float sphereRadius = characterController.radius * 0.9f; // Небольшой отступ от радиуса
+        Vector3 spherePosition = transform.position + Vector3.up * sphereRadius; // Смещаем сферу вниз
+
+        // Проверяем, касается ли сфера земли
+        isGrounded = Physics.CheckSphere(spherePosition, sphereRadius, ~ignoreTriggerLayerMask, QueryTriggerInteraction.Ignore);
 
         return isGrounded;
     }
 
     private bool UpdateFallingState()
     {
-        if (!isGrounded)
+        if (!isGrounded && movementDirection.y < 0)
         {
             StartCoroutine(CheckIsFalling(0.25f));
         }
@@ -289,17 +298,14 @@ public class CharacterMovement : MonoBehaviour
     private IEnumerator CheckIsFalling(float delay)
     {
         yield return new WaitForSeconds(delay);
-        if (transform.localPosition.y < lastDistanceToGround) isFalling = true;
+        isFalling = true;
     }
 
-    private void ResetState()
+    public void ResetState()
     {
-        isAiming = false;
-        isJump = false;
-        isCrouch = false;
-        isRun = false;
-        isAiming = false;
-        isStartClimbing = false;
+        UnRun();
+        UnCrouch();
+        UnAiming();
     }
 
     private CharacterController UpdateCharacterControllerHeightState()

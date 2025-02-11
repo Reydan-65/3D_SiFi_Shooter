@@ -43,6 +43,7 @@ public class Projectile : ProjectileBase
 
     protected override void OnProjectileLifeEnd(Collider collider, Vector3 position, Vector3 normal)
     {
+        if (collider is CharacterController) return;
         if (m_ImpactEffect != null)
         {
             ImpactEffect impact = Instantiate(m_ImpactEffect, position, Quaternion.LookRotation(normal));
@@ -92,7 +93,6 @@ public class Projectile : ProjectileBase
     {
         Collider collider = hit.collider.GetComponent<Collider>();
 
-        //if (collider.GetComponent<Wall>() == true || collider.transform.root.GetComponent<GravityWell>() == true)
         if (collider && !collider.isTrigger)
             OnProjectileLifeEnd(hit.collider, hit.point, hit.normal);
 

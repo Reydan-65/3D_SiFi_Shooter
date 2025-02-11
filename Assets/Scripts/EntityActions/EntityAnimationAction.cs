@@ -13,7 +13,8 @@ public class EntityAnimationAction : EntityAction
     {
         base.StartAction();
 
-        m_Animator.CrossFade(m_ActionAnimationName, m_TimeDuration);
+        if (m_Animator != null)
+            m_Animator.CrossFade(m_ActionAnimationName, m_TimeDuration);
 
         m_Timer = Timer.CreateTimer(m_TimeDuration, true);
         m_Timer.OnTick += OnTimerTick;

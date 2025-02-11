@@ -1,39 +1,75 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Destructible : DestructibleBase
 {
-    //[SerializeField] private int m_ScoreValue;
-    //public int ScoreValue => m_ScoreValue;
-
-    protected override void OnDeath()
+    public static Destructible FindNearest(Vector3 position)
     {
-        // Вычитаем количество призванных объектов у Spawner'а, если
-        // уничтоженный объект был создан этим Spawner'ом
-        //if (transform.root.TryGetComponent(out AI_Controller controller) == true)
-        //{
-        //    if (controller.AISpawnedDrone == true)
-        //    {
-        //        EntitiesSpawner spawner = FindAnyObjectByType<EntitiesSpawner>();
-        //        spawner.CountSpawned--;
-        //    }
-        //}
+        float minDist = float.MaxValue;
+        Destructible target = null;
 
-        //if (GetComponentInChildren<TrailRenderer>() != null)
-        //    GetComponentInChildren<TrailRenderer>().enabled = false;
-        //if (GetComponentInChildren<SpriteRenderer>() != null)
-        //    GetComponentInChildren<SpriteRenderer>().enabled = false;
-        //if (GetComponentInChildren<Collider2D>() != null)
-        //    GetComponentInChildren<Collider2D>().enabled = false;
+        foreach (Destructible destructible in m_AllDestructible)
+        {
+            float curDist = Vector3.Distance(destructible.transform.position, position);
 
-        //if (TryGetComponent(out Rigidbody2D rb) == true)
-        //    rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+            if (curDist < minDist)
+            {
+                minDist = curDist;
+                target = destructible;
+            }
+        }
 
-        //if (gameObject.TryGetComponent(out Drone Drone) == true ||
-        //    gameObject.TryGetComponent(out Debris debris) == true)
-        //    Destroy(gameObject, 2);
-        //else
-        //    Destroy(gameObject);
+        return target;
+    }
 
-        //base.OnDeath();
+    public static Destructible FindNearestNonTeamMember(Destructible destructible)
+    {
+        float minDist = float.MaxValue;
+        Destructible target = null;
+
+        foreach (Destructible dest in m_AllDestructible)
+        {
+            if (dest.IsDead) continue;
+
+            float curDist = Vector3.Distance(dest.transform.position, destructible.transform.position);
+
+            if (curDist < minDist && destructible.TeamId != dest.TeamId)
+            {
+                minDist = curDist;
+                target = dest;
+            }
+        }
+
+        return target;
+    }
+
+    public static List<Destructible> GetAllTeamMembers(int teamID)
+    {
+        List<Destructible> teamDestructble = new List<Destructible>();
+
+        foreach (Destructible destructible in m_AllDestructible)
+        {
+            if (destructible.TeamId == teamID)
+            {
+                teamDestructble.Add(destructible);
+            }
+        }
+
+        return teamDestructble;
+    }
+
+    public static List<Destructible> GetAllNonTeamMembers(int teamID)
+    {
+        List<Destructible> nonTeamDestructble = new List<Destructible>();
+
+        foreach (Destructible destructible in m_AllDestructible)
+        {
+            if (destructible.TeamId != teamID)
+            {
+                nonTeamDestructble.Add(destructible);
+            }
+        }
+
+        return nonTeamDestructble;
     }
 }

@@ -65,7 +65,7 @@ public class ThirdPersonCamera : MonoBehaviour
         {
             float distanceToHit = Vector3.Distance(offsetPosition, hit.point);
 
-            if (hit.transform != targetTransform)
+            if (hit.transform != targetTransform && !hit.collider.isTrigger)
             {
                 if (distanceToHit < distanceToTarget)
                     targetDistance = distanceToHit - distanceOffsetFromCollisionHit;
@@ -120,7 +120,7 @@ public class ThirdPersonCamera : MonoBehaviour
         {
             float distanceToHit = hit.distance;
 
-            if (hit.transform != targetTransform)
+            if (hit.transform != targetTransform && !hit.collider.isTrigger)
             {
                 if (distanceToHit < Offset.x)
                 {
@@ -140,5 +140,10 @@ public class ThirdPersonCamera : MonoBehaviour
     public void SetDefaultTargetCrouchOffset()
     {
         targetOffset = defaultCrouchOffset;
+    }
+
+    public void SetTarget(Transform target)
+    {
+        targetTransform = target;
     }
 }

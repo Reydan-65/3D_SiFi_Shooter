@@ -10,7 +10,7 @@ public class AimPoint : MonoBehaviour
 
         if (Physics.Raycast(transform.position, transform.forward, out hit, 1000) == true)
         {
-            if (!hit.collider.isTrigger)
+            if (!hit.collider.isTrigger && hit.collider != hit.collider.GetComponent<CharacterController>())
                 transform.position = hit.point;
         }
     }

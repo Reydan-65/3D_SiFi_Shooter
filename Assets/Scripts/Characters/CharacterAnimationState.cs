@@ -6,6 +6,7 @@ public class CharacterAnimatorParametersName
     public string NormolizeMovementX;
     public string NormolizeMovementZ;
     public string Run;
+    public string InteractAction;
     public string Crouch;
     public string Aiming;
     public string Ground;
@@ -60,6 +61,7 @@ public class CharacterAnimationState : MonoBehaviour
         targetAnimator.SetBool(AnimatorParametersName.Ground, targetCharacterMovement.IsGrounded);
         targetAnimator.SetBool(AnimatorParametersName.Falling, targetCharacterMovement.IsFalling);
         targetAnimator.SetBool(AnimatorParametersName.Climbing, targetCharacterMovement.IsClimbing);
+        targetAnimator.SetBool(AnimatorParametersName.InteractAction, targetCharacterMovement.IsInteractAction);
 
         Vector3 groundSpeed = targetCharacterController.velocity;
         groundSpeed.y = 0;

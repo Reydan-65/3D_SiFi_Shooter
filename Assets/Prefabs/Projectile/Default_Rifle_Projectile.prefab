@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Nickname: 
   m_Velocity: 350
   m_Lifetime: 20
-  m_Damage: 10
+  m_Damage: 20
   m_DisablerPrefab: {fileID: 0}
   m_ImpactEffect: {fileID: 9061448343928010068, guid: 8dd6b582e6d445e43b4374b6d54d044b, type: 3}
 --- !u!1 &7931221656636880640

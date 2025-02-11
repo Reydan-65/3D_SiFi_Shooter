@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class ProjectileBase : Entity
@@ -40,7 +39,7 @@ public abstract class ProjectileBase : Entity
 
                 if (destructible != null && destructible != m_Parent)
                 {
-                    destructible.ApplyDamage(m_Damage);
+                    destructible.ApplyDamage(m_Damage, m_Parent);
 
                     OnHit(destructible);
                     OnProjectileLifeEnd(hit.collider, hit.point, hit.normal);

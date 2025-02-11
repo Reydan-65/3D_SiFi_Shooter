@@ -8,6 +8,9 @@ public class UISight : MonoBehaviour
 
     private void Update()
     {
-        sightImage.enabled = characterMovement.IsAiming;
+        if (characterMovement != null)
+            sightImage.enabled = characterMovement.IsAiming;
+        else
+            sightImage.enabled = true;
     }
 }

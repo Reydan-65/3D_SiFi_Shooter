@@ -1,4 +1,3 @@
-using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class PlayerShooter : MonoBehaviour
@@ -9,13 +8,26 @@ public class PlayerShooter : MonoBehaviour
     [SerializeField] private Camera mainCamera;
     [SerializeField] private RectTransform imageSight;
     [SerializeField] private LayerMask ignoreTriggerLayerMask;
+
     public void Shoot()
     {
         Ray ray = mainCamera.ScreenPointToRay(imageSight.position);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, 1000, ~ignoreTriggerLayerMask))
+        Vector3 rayOrigin = mainCamera.transform.position;
+        Vector3 rayDir = ray.direction;
+
+        Ray weaponRay = new Ray(rayOrigin, rayDir);
+
+        RaycastHit[] hits = Physics.RaycastAll(weaponRay, 1000);
+
+        foreach (RaycastHit hit in hits)
         {
-            weapon.FirePointLookAt(hit.point);
+            // Игнорируем триггеры
+            if (!hit.collider.isTrigger)
+            {
+                weapon.FirePointLookAt(hit.point);
+                break;
+            }
         }
 
         if (weapon.CanFire == true)
@@ -25,21 +37,20 @@ public class PlayerShooter : MonoBehaviour
         }
     }
 
-
 #if UNITY_EDITOR
 
     private void OnDrawGizmos()
     {
+        if (mainCamera == null || mainCamera == null || imageSight == null)
+            return;
+
         Gizmos.color = Color.yellow;
         Ray ray = mainCamera.ScreenPointToRay(imageSight.position);
-
-        if (Physics.Raycast(ray, out RaycastHit hit, 1000, ~ignoreTriggerLayerMask))
-        {
-            Gizmos.DrawLine(transform.position, hit.point);
-        }
+        Vector3 rayOrigin = mainCamera.transform.position;
+        Vector3 rayDirection = ray.direction;
+        Gizmos.DrawLine(rayOrigin, rayOrigin + rayDirection * 1000);
     }
 
 #endif
-
 
 }

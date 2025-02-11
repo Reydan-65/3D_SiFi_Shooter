@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterInputController : MonoBehaviour
@@ -9,16 +8,13 @@ public class CharacterInputController : MonoBehaviour
     [SerializeField] private Vector3 aimingOffset;
     [SerializeField] private Vector3 crouchOffset;
     [SerializeField] private Vector3 aimingCrouchOffset;
-
-    [SerializeField] private EntityActionCollector TargetActionCollector;
-
-    private TriggerInteractAction triggerInteractAction;
-    public TriggerInteractAction TriggerInteractAction {get => triggerInteractAction; set => triggerInteractAction = value; }
+    [SerializeField] private Vector3 cameraOffset;
 
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        targetCharacterMovement.UpdatePosition = true;
     }
 
     private void Update()
@@ -123,22 +119,13 @@ public class CharacterInputController : MonoBehaviour
         {
             playerShooter.Shoot();
         }
+    }
 
-        // Interaction
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            if (triggerInteractAction == null) return;
-
-            targetCharacterMovement.IsInteractAction = true;
-
-            if (targetCharacterMovement.TargetLadder) targetCharacterMovement.StartClimbing();
-
-            List<EntityContextAction> actionsList = TargetActionCollector.GetActionList<EntityContextAction>();
-
-            for (int i = 0; i < actionsList.Count; i++)
-            {
-                actionsList[i].StartAction();
-            }
-        }
+    public void AssingCamera(ThirdPersonCamera camera)
+    {
+        targetCamera = camera;
+        targetCamera.IsRotateTarget = false;
+        targetCamera.SetTargetOffset(cameraOffset);
+        targetCamera.SetTarget(targetCharacterMovement.transform);
     }
 }

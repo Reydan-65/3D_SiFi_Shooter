@@ -10,7 +10,11 @@ public class DestructibleBase : Entity
     [SerializeField] protected UnityEvent m_EventOnDeath;
     public UnityEvent EventOnDeath => m_EventOnDeath;
 
-    protected bool IsDead;
+    [SerializeField] protected UnityEvent m_EventOnGetDamage;
+    public UnityAction<DestructibleBase> OnGetDamage;
+
+    protected bool isDead;
+    public bool IsDead => isDead;
 
     #region Properties
 
@@ -39,7 +43,7 @@ public class DestructibleBase : Entity
     protected virtual void Start()
     {
         transform.SetParent(null);
-        IsDead = false;
+        isDead = false;
         m_CurrentHitPoints = m_HitPoints;
     }
 
@@ -51,23 +55,26 @@ public class DestructibleBase : Entity
     /// Применение урона к объекту.
     /// </summary>
     /// <param name="damage"> Урон наносимый объекту </param>
-    public void ApplyDamage(int damage)
+    public void ApplyDamage(int damage, Destructible other)
     {
-        if (m_Indestructible || IsDead) return;
+        if (m_Indestructible || isDead) return;
         
         m_CurrentHitPoints -= damage;
 
         if (m_CurrentHitPoints <= 0)
         {
             m_CurrentHitPoints = 0;
-            IsDead = true;
+            isDead = true;
             OnDeath();
         }
+
+        OnGetDamage?.Invoke(other);
+        m_EventOnGetDamage?.Invoke();
     }
 
     public void ApplyHeal(int count)
     {
-        if (IsDead) return;
+        if (isDead) return;
 
         m_CurrentHitPoints += count;
         if (m_CurrentHitPoints >= m_HitPoints) m_CurrentHitPoints = m_HitPoints;
@@ -75,7 +82,7 @@ public class DestructibleBase : Entity
 
     public void RestoreHealth()
     {
-        if (IsDead) return;
+        if (isDead) return;
 
         m_CurrentHitPoints = m_HitPoints;
     }
@@ -100,7 +107,7 @@ public class DestructibleBase : Entity
     /// Удаление из данного списка, если объект уничтожен.
     /// Разделение на группы.
     /// </summary>
-    private static HashSet<DestructibleBase> m_AllDestructible;
+    protected static HashSet<DestructibleBase> m_AllDestructible;
     public static IReadOnlyCollection<DestructibleBase> AllDestructible => m_AllDestructible;
 
     protected virtual void OnEnable()

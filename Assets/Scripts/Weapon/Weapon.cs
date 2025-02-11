@@ -7,10 +7,10 @@ public class Weapon : WeaponBase
     [SerializeField] private CharacterMovement targetCharacterMovement;
     [SerializeField] private ParticleSystem targetMuzzleFlashParticles;
 
-    private float m_RefireTimer;
+    protected float m_RefireTimer;
     public bool CanFire => m_RefireTimer <= 0 && EnergyIsRestored == true;
 
-    [SerializeField] private Transform firePoint;
+    [SerializeField] protected Transform firePoint;
     [SerializeField] private float primaryMaxEnergy;
 
     private float primaryEnergy;
@@ -43,7 +43,7 @@ public class Weapon : WeaponBase
 
         if (targetCharacterMovement != null)
         {
-            if (targetCharacterMovement.IsAiming && !targetCharacterMovement.IsCrouch)
+            if (targetCharacterMovement.IsAiming && !targetCharacterMovement.IsCrouch && targetCharacterMovement.GetComponent<AIAlienSoldier>() == false)
             {
                 transform.localRotation = Quaternion.Euler(transform.localRotation.x, transform.localRotation.y + AIMING_OFFSET, transform.localRotation.z);
             }
@@ -55,7 +55,7 @@ public class Weapon : WeaponBase
                 transform.localRotation = Quaternion.Euler(baseRotation.x, baseRotation.y - 5, baseRotation.z + AIMING_OFFSET);
 
             if (targetCharacterMovement.transform.GetComponent<CharacterController>().velocity.magnitude > 0.01f && !targetCharacterMovement.IsAiming)
-                transform.localRotation = Quaternion.Euler(baseRotation.x + 10, baseRotation.y, baseRotation.z + 15);
+                transform.localRotation = Quaternion.Euler(baseRotation.x + 10, baseRotation.y + 10, baseRotation.z + 15);
         }
 
         UpdateEnergy();
@@ -97,6 +97,8 @@ public class Weapon : WeaponBase
         audioSource.clip = weaponProperties.LaunchSFX;
         audioSource.pitch = pitch;
         audioSource.Play();
+
+        SoundEvent.EmitSound(transform.position, 20f);
     }
 
     public override void AssingLoadout(WeaponProperties properties)
@@ -132,7 +134,7 @@ public class Weapon : WeaponBase
         return false;
     }
 
-    private void UpdateEnergy()
+    protected void UpdateEnergy()
     {
         primaryEnergy += (float)weaponProperties.EnergyRegenPerSecond * Time.deltaTime;
         primaryEnergy = Mathf.Clamp(primaryEnergy, 0, primaryMaxEnergy);

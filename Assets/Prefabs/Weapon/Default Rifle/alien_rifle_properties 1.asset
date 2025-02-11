@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11d6c73071e946a44b6b86808c607069, type: 3}
+  m_Name: alien_rifle_properties 1
+  m_EditorClassIdentifier: 
+  m_Mode: 0
+  m_ProjectilePrefab: {fileID: 8680394060624364197, guid: eaa307030a45c0c408357a574804b2dc, type: 3}
+  m_RateOfFire: 0.3
+  m_EnergyUsage: 20
+  m_EnergyAmoutToStartFire: 100
+  m_EnergyRegenPerSecond: 30
+  m_SpreadShootRange: 0.25
+  m_SpreadShootDistanceFactor: 0.05
+  m_LaunchSFX: {fileID: 8300000, guid: 517c8ed6322c7dc4c9fc4a1529ee1b6d, type: 3}

@@ -10,7 +10,7 @@ public class DroneInteraction : MonoBehaviour
         {
             foreach (Drone drone in m_Spawner.SpawnedDronesList)
             {
-                drone.ApplyDamage(drone.MaxHitPoints);
+                drone.ApplyDamage(drone.MaxHitPoints, drone);
             }
         }
     }
